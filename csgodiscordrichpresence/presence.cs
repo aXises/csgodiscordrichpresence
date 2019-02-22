@@ -145,10 +145,24 @@ namespace csgodiscordrichpresence
                     {
                         string selectedWeapon = gsl.CurrentGameState.Player.Weapons.ActiveWeapon.Name;
                         
-                        string[] weaponProp = selectedWeapon.Split('_');
+			string[] weaponProp = selectedWeapon.Split('_');
 
-                        string currentWeapon = weaponProp.Length == 0 ? "Unknown Weapon" : String.Join(" ", weaponProp, weaponProp.Length == 1 ? 0 : 1, weaponProp.Length == 1 ? 1 : weaponProp.Length - 1);
-		
+			string currentWeapon = "Unknown Weapon";
+			if (weaponProp.Length != 0)
+			{
+				for (int i = 1; i < weaponProp.Length; i++)
+				{
+					if (weaponProp[i].Length == 1)
+					{
+						weaponProp[i] = weaponProp[i].ToUpper();
+					} else
+					{
+						weaponProp[i] = weaponProp[i].Remove(1).ToUpper() + weaponProp[i].Substring(1);
+					}
+				}
+				currentWeapon = String.Join(" ", weaponProp, 1, weaponProp.Length - 1);
+			}
+
                         string playerState = gsl.CurrentGameState.Player.State.Flashed > 0 ? "Flashed" : gsl.CurrentGameState.Player.State.Smoked > 0 ? "In Smoke" :
                             gsl.CurrentGameState.Player.State.Burning > 0 ? "In a Fire" : ""; 
                         string stateText = gsl.CurrentGameState.Map.Phase.ToString() != "Live" ? gsl.CurrentGameState.Map.Phase.ToString() : playerState;
